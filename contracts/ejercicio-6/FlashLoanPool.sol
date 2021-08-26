@@ -18,7 +18,9 @@ contract FlashLoanPool {
 
     function withdraw() external {
         uint256 amountToWithdraw = balances[msg.sender];
+
         balances[msg.sender] = 0;
+        
         payable(msg.sender).sendValue(amountToWithdraw);
     }
 

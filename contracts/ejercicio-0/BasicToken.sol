@@ -43,6 +43,7 @@ contract BasicToken is Mintable {
 
     // Función para crear tokens. Sólo llamable por una cuenta con privilegios.
     function mint(address to, uint256 amount) external onlyMinter {
+        totalSupply += amount;
         balances[to] += amount;
     }
 }
